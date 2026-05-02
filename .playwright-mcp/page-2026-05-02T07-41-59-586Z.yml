@@ -1,0 +1,28 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e9]: PixelCrypt
+    - navigation [ref=e10]:
+      - button "Encode" [ref=e11] [cursor=pointer]
+      - button "Decode" [active] [ref=e12] [cursor=pointer]
+      - button "How It Works" [ref=e13] [cursor=pointer]
+  - main [ref=e14]:
+    - generic [ref=e74]:
+      - heading "Extract Hidden Message" [level=2] [ref=e75]
+      - generic [ref=e76] [cursor=pointer]:
+        - img [ref=e77]
+        - paragraph [ref=e80]: Drop encoded PNG here
+        - text: Upload an image with hidden data
+      - generic [ref=e81]:
+        - img "Preview" [ref=e83]
+        - generic [ref=e84]:
+          - generic [ref=e85]: image.png
+          - text: 0 KB
+        - button "Clear" [ref=e86] [cursor=pointer]:
+          - img [ref=e87]
+      - button "Extract Message" [disabled] [ref=e89]:
+        - img [ref=e90]
+        - text: Extract Message
+  - contentinfo [ref=e45]:
+    - paragraph [ref=e46]: PixelCrypt — Client-side steganography. Your data never leaves your browser.

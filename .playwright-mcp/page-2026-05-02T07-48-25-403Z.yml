@@ -1,0 +1,38 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e9]: PixelCrypt
+    - navigation [ref=e10]:
+      - button "Encode" [ref=e11] [cursor=pointer]
+      - button "Decode" [ref=e12] [cursor=pointer]
+      - button "How It Works" [ref=e13] [cursor=pointer]
+  - main [ref=e14]:
+    - generic [ref=e16]:
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - heading "Upload Image" [level=2] [ref=e19]
+          - generic [ref=e25]:
+            - img "Preview" [ref=e27]
+            - generic [ref=e28]:
+              - generic [ref=e29]: test_image.png
+              - text: 291 B
+            - button "Clear" [ref=e30] [cursor=pointer]:
+              - img [ref=e31]
+          - generic [ref=e48]:
+            - generic [ref=e49]: Capacity
+            - generic [ref=e50]: 0.03 / 3.60 KB
+        - generic [ref=e33]:
+          - heading "Your Message" [level=2] [ref=e34]
+          - generic [ref=e35]:
+            - textbox "Enter your secret message..." [ref=e36]: Hello, this is a secret message!
+            - generic [ref=e37]: 32 / 10240 characters
+          - generic [ref=e41] [cursor=pointer]: Enable encryption
+          - button "Hide Message" [disabled] [ref=e42]:
+            - img [ref=e43]
+            - text: Hide Message
+      - generic [ref=e54]:
+        - heading "Encoding..." [level=3] [ref=e55]
+        - generic [ref=e58]: 67%
+  - contentinfo [ref=e45]:
+    - paragraph [ref=e46]: PixelCrypt — Client-side steganography. Your data never leaves your browser.

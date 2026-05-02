@@ -1,0 +1,5 @@
+[      31ms] [LOG] PixelCrypt initialized @ http://localhost:8080/app.js:694
+[      68ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/:0
+[      68ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ http://localhost:8080/:0
+[     106ms] [ERROR] Failed to load resource: the server responded with a status of 404 (File not found) @ http://localhost:8080/favicon.ico:0
+[  119088ms] [LOG] Image loaded: 100 x 100 @ :40

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PixelCrypt - Steganography Portal</title>
+    <!-- Preconnect to fonts for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Premium Ambient Background -->
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Main Glass Application Window -->
+    <div class="app-window">
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <div style="display: flex; flex-direction: column;">
+                    <h1 class="logo-text">PixelCrypt</h1>
+                    <span class="signature-text">Made by Farhan</span>
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="tab-btn active" data-tab="encode">Encode</button>
+                <button class="tab-btn" data-tab="decode">Decode</button>
+                <button class="tab-btn" data-tab="how-it-works">How It Works</button>
+            </nav>
+        </header>
+
+        <main class="main">
+            <!-- Encode Tab -->
+            <section class="tab-content active" id="encode">
+                <div class="action-grid">
+                    <div class="card">
+                        <h2>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            Source Image
+                        </h2>
+                        <div class="drop-zone" id="encode-drop-zone">
+                            <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                            </svg>
+                            <p>Drop PNG or click to browse</p>
+                            <span class="drop-hint">Encrypted data will be hidden in LSB</span>
+                            <input type="file" id="encode-file-input" accept="image/png" hidden>
+                        </div>
+                        
+                        <div class="file-info" id="encode-file-info" hidden>
+                            <div class="preview-thumb">
+                                <img id="encode-thumb" alt="Preview">
+                            </div>
+                            <div class="file-details">
+                                <span class="file-name" id="encode-filename">image.png</span>
+                                <span class="file-size" id="encode-filesize">0 KB</span>
+                            </div>
+                            <button class="btn-secondary" id="encode-clear" style="padding: 8px; border-radius: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="capacity-meter" id="capacity-meter" hidden>
+                            <div class="capacity-header">
+                                <span>Embedding Capacity</span>
+                                <span id="capacity-text">0 / 0 KB</span>
+                            </div>
+                            <div class="capacity-bar">
+                                <div class="capacity-fill" id="capacity-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            Payload
+                        </h2>
+                        <div class="input-group">
+                            <label>Secret Message</label>
+                            <div class="textarea-wrapper">
+                                <textarea id="message-input" placeholder="Whisper your secrets here..." maxlength="10240"></textarea>
+                                <div class="char-count">
+                                    <span id="char-count">0</span> / 10240
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="toggle-label">
+                                <span class="toggle-text">AES-GCM Encryption</span>
+                                <input type="checkbox" id="enable-encryption" hidden>
+                                <span class="toggle-switch"></span>
+                            </label>
+                        </div>
+
+                        <div class="input-group password-field" id="password-field" hidden>
+                            <label>Master Password</label>
+                            <div style="position: relative;">
+                                <input type="password" id="encode-password" placeholder="Min 4 characters">
+                                <button class="btn-secondary" id="toggle-encode-password" type="button" style="position: absolute; right: 4px; top: 4px; padding: 6px; border: none; background: transparent;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" id="encode-btn" disabled>
+                            Generate Encoded Portal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Overlays -->
+                <div class="overlay-container" id="encode-progress" hidden>
+                    <button class="btn-secondary" id="encode-progress-close" style="position: absolute; top: 20px; right: 20px; padding: 8px; border-radius: 50%; width: 40px; height: 40px; border: none; background: rgba(255,255,255,0.05);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                    <div class="progress-orb">
+                        <div class="progress-circle"></div>
+                        <div class="progress-value" id="encode-progress-text">0%</div>
+                    </div>
+                    <h3 style="font-family: var(--font-heading);">Bending Pixels...</h3>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Injecting message into LSB layer</p>
+                    <div id="encode-progress-fill" style="display: none;"></div>
+                </div>
+
+                <div class="overlay-container" id="encode-result" hidden>
+                    <button class="btn-secondary" id="encode-result-close" style="position: absolute; top: 20px; right: 20px; padding: 8px; border-radius: 50%; width: 40px; height: 40px; border: none; background: rgba(255,255,255,0.05);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                    <div class="result-card">
+                        <div class="result-preview">
+                            <img id="result-thumb" alt="Encoded result">
+                        </div>
+                        <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 8px;">Portal Synchronized</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Your secret is now part of the image data.</p>
+                        <div style="display: flex; gap: 12px; justify-content: center;">
+                            <button class="btn-primary" id="download-btn">Download PNG</button>
+                            <button class="btn-secondary" id="copy-result-btn">Copy Image</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Decode Tab -->
+            <section class="tab-content" id="decode">
+                <div style="max-width: 600px; margin: 0 auto;">
+                    <div class="card">
+                        <h2 style="justify-content: center;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            Extraction Chamber
+                        </h2>
+                        <div class="drop-zone" id="decode-drop-zone">
+                            <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            <p>Drop encoded image</p>
+                            <span class="drop-hint">Scanning for PIXELCRYPT headers</span>
+                            <input type="file" id="decode-file-input" accept="image/png" hidden>
+                        </div>
+
+                        <div class="file-info" id="decode-file-info" hidden style="margin: 16px 0;">
+                            <div class="preview-thumb">
+                                <img id="decode-thumb" alt="Preview">
+                            </div>
+                            <div class="file-details">
+                                <span class="file-name" id="decode-filename">image.png</span>
+                                <span class="file-size" id="decode-filesize">0 KB</span>
+                            </div>
+                            <button class="btn-secondary" id="decode-clear" style="padding: 8px; border-radius: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="input-group" id="decode-password-field" hidden style="margin-top: 16px;">
+                            <label>Decryption Key</label>
+                            <div style="position: relative;">
+                                <input type="password" id="decode-password" placeholder="Enter master password">
+                                <button class="btn-secondary" id="toggle-decode-password" type="button" style="position: absolute; right: 4px; top: 4px; padding: 6px; border: none; background: transparent;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" id="decode-btn" disabled style="width: 100%; margin-top: 24px;">
+                            Extract Hidden Payload
+                        </button>
+                    </div>
+
+                    <div class="overlay-container" id="decode-progress" hidden>
+                        <button class="btn-secondary" id="decode-progress-close" style="position: absolute; top: 20px; right: 20px; padding: 8px; border-radius: 50%; width: 40px; height: 40px; border: none; background: rgba(255,255,255,0.05);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        </button>
+                        <div class="progress-orb">
+                            <div class="progress-circle"></div>
+                            <div class="progress-value" id="decode-progress-text">0%</div>
+                        </div>
+                        <h3 style="font-family: var(--font-heading);">Reconstructing...</h3>
+                        <div id="decode-progress-fill" style="display: none;"></div>
+                    </div>
+
+                    <div id="decode-result" hidden style="margin-top: 24px;">
+                        <div class="card">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <h3 style="margin: 0;">Extracted Message</h3>
+                                <button class="btn-secondary" id="decode-result-close" style="padding: 4px; border: none; background: transparent;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            <div class="extracted-content" id="extracted-text"></div>
+                            <button class="btn-secondary" id="copy-extracted-btn" style="width: 100%;">Copy to Clipboard</button>
+                        </div>
+                    </div>
+
+                    <div id="decode-error" hidden style="margin-top: 24px;">
+                        <div class="card" style="border-color: var(--error);">
+                            <h3 style="color: var(--error);">Extraction Failed</h3>
+                            <p id="decode-error-msg" style="color: var(--text-secondary); margin: 8px 0 16px;">No hidden PIXELCRYPT data detected.</p>
+                            <button class="btn-secondary" id="decode-retry-btn" style="width: 100%;">Reset Chamber</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Tab -->
+            <section class="tab-content" id="how-it-works">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div class="card" style="text-align: center;">
+                        <h2 style="justify-content: center;">Behind the Pixels</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 32px; text-wrap: pretty;">
+                            PixelCrypt uses LSB (Least Significant Bit) Steganography to weave your data into the very fabric of an image.
+                        </p>
+                        
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L22 22m-5-10l4.5 4.5"/></svg>
+                                </div>
+                                <h3 style="font-size: 1rem; margin-bottom: 8px;">Binary Injection</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">Your message is converted to a bitstream. Each bit replaces the lowest bit of an RGB channel.</p>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </div>
+                                <h3 style="font-size: 1rem; margin-bottom: 8px;">AES-GCM Security</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">Before embedding, data is encrypted using military-grade AES-256 with PBKDF2 key derivation.</p>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                </div>
+                                <h3 style="font-size: 1rem; margin-bottom: 8px;">Zero Knowledge</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">All processing happens locally in your browser. Your images and passwords never touch a server.</p>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Binary Sandbox -->
+                        <div class="sandbox-container" style="margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--border-glass);">
+                            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 24px;">Binary Sandbox</h3>
+                            
+                            <div class="action-grid sandbox-grid">
+                                <div class="card" style="text-align: left; background: rgba(0,0,0,0.2);">
+                                    <div class="input-group">
+                                        <label>Input Character</label>
+                                        <input type="text" id="sandbox-input" maxlength="1" placeholder="A" style="font-family: var(--font-mono); font-size: 1.5rem; text-align: center; color: var(--primary);">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>ASCII Binary</label>
+                                        <div id="sandbox-binary" class="binary-display" style="font-family: var(--font-mono); font-size: 1.2rem; color: #fff; letter-spacing: 4px;">01000001</div>
+                                    </div>
+                                </div>
+
+                                <div class="card" style="background: rgba(0,0,0,0.3);">
+                                    <div style="display: flex; align-items: center; gap: 24px;">
+                                        <div id="sandbox-pixel-preview" style="width: 80px; height: 80px; border-radius: 12px; background: rgb(120, 200, 150); box-shadow: 0 0 20px rgba(120, 200, 150, 0.3);"></div>
+                                        <div style="flex: 1; text-align: left;">
+                                            <div class="sandbox-channel" data-channel="R">
+                                                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--error);">R</span>
+                                                <div class="bit-row" id="sandbox-bits-R"></div>
+                                            </div>
+                                            <div class="sandbox-channel" data-channel="G">
+                                                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--success);">G</span>
+                                                <div class="bit-row" id="sandbox-bits-G"></div>
+                                            </div>
+                                            <div class="sandbox-channel" data-channel="B">
+                                                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: #3b82f6;">B</span>
+                                                <div class="bit-row" id="sandbox-bits-B"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 16px; font-style: italic;">
+                                        Observe how the last bit (LSB) changes to store data while the color remains visually the same.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer style="padding: 16px 40px; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2);">
+            <p style="font-size: 0.75rem; color: var(--text-muted);">© 2026 PixelCrypt Protocol</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">v1.0.0-STABLE</p>
+        </footer>
+    </div>
+
+    <!-- Notification Layer -->
+    <div class="toast" id="toast">
+        <span class="toast-message"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
