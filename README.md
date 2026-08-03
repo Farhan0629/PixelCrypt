@@ -9,9 +9,10 @@
 </p>
 
 <p align="center">
-  <a href="#-version"><img src="https://img.shields.io/badge/version-v2.0.0--SECURE-00d4aa.svg?style=for-the-badge" alt="Version"></a>
-  <a href="#-encryption"><img src="https://img.shields.io/badge/encryption-AES--256--GCM-8b5cf6.svg?style=for-the-badge" alt="Encryption"></a>
-  <a href="#-privacy"><img src="https://img.shields.io/badge/privacy-100%25%20Offline%20%26%20Client--Side-10b981.svg?style=for-the-badge" alt="Privacy"></a>
+  <a href="https://farhan0629.github.io/PixelCrypt/"><img src="https://img.shields.io/badge/🚀%20LIVE%20DEMO-OPEN%20PIXELCRYPT-00d4aa.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo"></a>
+  <a href="#-version"><img src="https://img.shields.io/badge/version-v2.0.0--SECURE-8b5cf6.svg?style=for-the-badge" alt="Version"></a>
+  <a href="#-encryption"><img src="https://img.shields.io/badge/encryption-AES--256--GCM-10b981.svg?style=for-the-badge" alt="Encryption"></a>
+  <a href="#-privacy"><img src="https://img.shields.io/badge/privacy-100%25%20Offline-00d4aa.svg?style=for-the-badge" alt="Privacy"></a>
   <a href="#-license"><img src="https://img.shields.io/badge/license-MIT-f59e0b.svg?style=for-the-badge" alt="License"></a>
 </p>
 
