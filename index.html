@@ -93,21 +93,24 @@
                         </div>
 
                         <div class="input-group">
-                            <label class="toggle-label">
-                                <span class="toggle-text">AES-GCM Encryption</span>
-                                <input type="checkbox" id="enable-encryption" hidden>
-                                <span class="toggle-switch"></span>
-                            </label>
+                            <label>Bundle Hint Note</label>
+                            <input type="text" id="bundle-hint-input" maxlength="140" placeholder="Optional clue for the recipient">
                         </div>
 
-                        <div class="input-group password-field" id="password-field" hidden>
-                            <label>Master Password</label>
+                        <div class="security-badge">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>AES-256-GCM Encryption Active</span>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Password (Optional)</label>
                             <div style="position: relative;">
-                                <input type="password" id="encode-password" placeholder="Min 4 characters">
+                                <input type="password" id="encode-password" placeholder="Leave blank to auto-generate a secure key">
                                 <button class="btn-secondary" id="toggle-encode-password" type="button" style="position: absolute; right: 4px; top: 4px; padding: 6px; border: none; background: transparent;">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                 </button>
                             </div>
+                            <span class="input-helper">If left blank, PixelCrypt will generate a secure random 256-bit encryption key for you.</span>
                         </div>
 
                         <button class="btn-primary" id="encode-btn" disabled>
@@ -134,14 +137,73 @@
                     <button class="btn-secondary" id="encode-result-close" style="position: absolute; top: 20px; right: 20px; padding: 8px; border-radius: 50%; width: 40px; height: 40px; border: none; background: rgba(255,255,255,0.05);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                     </button>
-                    <div class="result-card">
-                        <div class="result-preview">
-                            <img id="result-thumb" alt="Encoded result">
-                        </div>
+                    <div class="result-card result-card-wide">
+                        <span class="result-kicker">Encoding complete</span>
                         <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 8px;">Portal Synchronized</h3>
-                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Your secret is now part of the image data.</p>
-                        <div style="display: flex; gap: 12px; justify-content: center;">
+                        <p style="color: var(--text-secondary); margin-bottom: 24px;">Your secret is AES-256-GCM encrypted and scattered across pseudo-random pixels.</p>
+
+                        <!-- Generated Encryption Key Card -->
+                        <div class="generated-key-card" id="generated-key-card" hidden>
+                            <div class="key-card-header">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+                                <h4>Generated Encryption Key</h4>
+                            </div>
+                            <div class="key-code-display" id="generated-key-code"></div>
+                            <div class="key-action-row">
+                                <button class="btn-secondary key-action-btn" id="copy-key-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    Copy Key
+                                </button>
+                                <button class="btn-secondary key-action-btn" id="download-key-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                    Download TXT
+                                </button>
+                            </div>
+                            <div class="key-warning-box">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                <span>Save this key carefully. Without it, the hidden message can never be recovered.</span>
+                            </div>
+                        </div>
+
+                        <div class="inspector-grid" aria-label="Visual difference inspector">
+                            <article class="inspector-panel">
+                                <div class="inspector-frame">
+                                    <img id="original-thumb" alt="Original source image">
+                                </div>
+                                <h4>Original Image</h4>
+                                <p>Carrier before the hidden payload was embedded.</p>
+                            </article>
+                            <article class="inspector-panel encoded-panel">
+                                <div class="inspector-frame">
+                                    <img id="result-thumb" alt="Encoded result">
+                                </div>
+                                <h4>Encoded Image</h4>
+                                <p>Looks visually identical, but the LSB layer now contains data.</p>
+                            </article>
+                            <article class="inspector-panel diff-panel">
+                                <div class="inspector-frame">
+                                    <img id="difference-thumb" alt="Amplified difference map">
+                                </div>
+                                <h4>Amplified Difference Map</h4>
+                                <p>Changed pixel channels are boosted so tiny LSB edits become visible.</p>
+                            </article>
+                        </div>
+
+                        <div class="bundle-card">
+                            <div>
+                                <span class="bundle-eyebrow">Secure sharing bundle</span>
+                                <h4>Ready for handoff</h4>
+                                <p>Downloads a zip with the encoded PNG, hint note, SHA-256 checksum, manifest, and decode instructions.</p>
+                            </div>
+                            <div class="bundle-meta">
+                                <span id="bundle-checksum-short">Checksum pending</span>
+                                <span id="bundle-size">Bundle pending</span>
+                            </div>
+                        </div>
+
+                        <div class="result-actions">
                             <button class="btn-primary" id="download-btn">Download PNG</button>
+                            <button class="btn-primary" id="download-bundle-btn">Download Bundle</button>
                             <button class="btn-secondary" id="copy-result-btn">Copy Image</button>
                         </div>
                     </div>
@@ -179,13 +241,14 @@
                         </div>
 
                         <div class="input-group" id="decode-password-field" hidden style="margin-top: 16px;">
-                            <label>Decryption Key</label>
+                            <label>Password or Encryption Key</label>
                             <div style="position: relative;">
-                                <input type="password" id="decode-password" placeholder="Enter master password">
+                                <input type="password" id="decode-password" placeholder="Enter password or 256-bit encryption key">
                                 <button class="btn-secondary" id="toggle-decode-password" type="button" style="position: absolute; right: 4px; top: 4px; padding: 6px; border: none; background: transparent;">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                 </button>
                             </div>
+                            <span class="input-helper">Enter the password you chose, or paste the generated encryption key (with or without dashes).</span>
                         </div>
 
                         <button class="btn-primary" id="decode-btn" disabled style="width: 100%; margin-top: 24px;">
@@ -221,7 +284,7 @@
                     <div id="decode-error" hidden style="margin-top: 24px;">
                         <div class="card" style="border-color: var(--error);">
                             <h3 style="color: var(--error);">Extraction Failed</h3>
-                            <p id="decode-error-msg" style="color: var(--text-secondary); margin: 8px 0 16px;">No hidden PIXELCRYPT data detected.</p>
+                            <p id="decode-error-msg" style="color: var(--text-secondary); margin: 8px 0 16px;">Incorrect password or encryption key.</p>
                             <button class="btn-secondary" id="decode-retry-btn" style="width: 100%;">Reset Chamber</button>
                         </div>
                     </div>
@@ -234,7 +297,7 @@
                     <div class="card" style="text-align: center;">
                         <h2 style="justify-content: center;">Behind the Pixels</h2>
                         <p style="color: var(--text-secondary); margin-bottom: 32px; text-wrap: pretty;">
-                            PixelCrypt uses LSB (Least Significant Bit) Steganography to weave your data into the very fabric of an image.
+                            PixelCrypt v2 uses AES-256-GCM encryption with pseudo-random pixel scattering to securely hide data inside images. Generic LSB extraction tools cannot recover the payload.
                         </p>
                         
                         <div class="info-grid">
@@ -249,8 +312,8 @@
                                 <div class="info-icon">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                 </div>
-                                <h3 style="font-size: 1rem; margin-bottom: 8px;">AES-GCM Security</h3>
-                                <p style="font-size: 0.85rem; color: var(--text-secondary);">Before embedding, data is encrypted using military-grade AES-256 with PBKDF2 key derivation.</p>
+                                <h3 style="font-size: 1rem; margin-bottom: 8px;">AES-256-GCM + PRNG Scatter</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">Data is AES-256-GCM encrypted, then embedded at pseudo-random pixel positions derived from your credential. Generic extractors get noise.</p>
                             </div>
                             <div class="info-item">
                                 <div class="info-icon">
@@ -308,7 +371,7 @@
 
         <footer style="padding: 16px 40px; border-top: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2);">
             <p style="font-size: 0.75rem; color: var(--text-muted);">© 2026 PixelCrypt Protocol</p>
-            <p style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">v1.0.0-STABLE</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">v2.0.0-SECURE</p>
         </footer>
     </div>
 
