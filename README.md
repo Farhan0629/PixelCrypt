@@ -36,7 +36,7 @@
 
 ## 💡 What is PixelCrypt?
 
-**PixelCrypt v2** is a zero-knowledge, browser-native cybersecurity tool that hides secret text messages inside normal digital PNG images. 
+**PixelCrypt v2** is a zero-knowledge, browser-native cybersecurity tool that accepts PNG, JPG, and JPEG source images and hides secret text messages in a lossless PNG output.
 
 Unlike basic steganography programs that leave unencrypted text embedded sequentially inside image pixels, **PixelCrypt v2** encrypts your message using military-grade **AES-256-GCM** encryption and scatters the encrypted bits randomly across the image canvas using a **key-derived pseudo-random number generator (PRNG)**.
 
@@ -63,6 +63,7 @@ If you are new to cybersecurity concepts, here is a simple analogy:
 - **🔑 Auto 256-Bit Cryptographic Key Generation**: Leave the password field blank, and PixelCrypt auto-generates a secure 256-bit key (`crypto.getRandomValues()`) formatted as `D4A9-7F22-8BC1-...`.
 - **📋 One-Click Key Copy & Download**: Copy generated keys directly to your clipboard or download them as a `.txt` key backup file.
 - **📦 Secure Handoff Bundles**: Export a ZIP package containing your encoded PNG, a hint note, SHA-256 checksum, manifest file, and recipient instructions.
+- **Flexible Source Images**: Encode from PNG, JPG, or JPEG files. PixelCrypt always exports the encoded image as PNG to preserve embedded data.
 - **🌐 100% Client-Side & Offline**: Built using native browser Web Crypto APIs. Zero server calls, zero network tracking, zero cookies, zero data storage.
 - **🔬 Visual Difference Inspector**: Built-in inspector compares the original image, encoded image, and an amplified difference map showing modified pixel channels.
 - **🧬 Interactive Binary Sandbox**: Learn how Least Significant Bits (LSB) work in real time by testing character-to-bit channel shifts.
@@ -121,7 +122,7 @@ PixelCrypt v2 uses a custom headerless binary format with **no human-readable ma
 ### 1. Hiding a Secret Message (Encoding)
 
 1. **Open PixelCrypt** in any modern web browser.
-2. Under the **Encode** tab, click or drag-and-drop a **PNG image** into the Source Image area.
+2. Under the **Encode** tab, click or drag-and-drop a **PNG, JPG, or JPEG image** into the Source Image area. PixelCrypt converts it to pixel data locally and exports the encoded result as a lossless PNG.
 3. Type your secret text in the **Secret Message** field.
 4. **Choose your Security Mode**:
    - **Custom Password**: Type a password of your choice in the **Password (Optional)** field.

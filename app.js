@@ -29,6 +29,8 @@ const AES_KEY_BITS      = 256;
 const AES_KEY_BYTES     = 32;
 const GCM_TAG_BYTES     = 16;            // Auth tag appended by Web Crypto
 const MAX_MESSAGE_CHARS = 10240;         // UI character limit
+const SUPPORTED_SOURCE_IMAGE_TYPES = new Set(['image/png', 'image/jpeg']);
+const SUPPORTED_SOURCE_IMAGE_EXTENSIONS = /\.(png|jpe?g)$/i;
 
 // Payload overhead (header bytes excluding ciphertext):
 //   Password mode: version(1) + mode(1) + salt(16) + iv(12) + len(4) = 34
@@ -528,6 +530,17 @@ function updateCapacityMeter() {
 // ========================================
 // File Handling
 // ========================================
+/**
+ * JPEG files are safe as encoding sources because they are decoded to pixels
+ * before embedding. The encoded result is still exported as lossless PNG so
+ * JPEG compression cannot alter the embedded LSBs.
+ */
+function isSupportedSourceImage(file) {
+    const type = (file.type || '').toLowerCase();
+    return SUPPORTED_SOURCE_IMAGE_TYPES.has(type) ||
+        SUPPORTED_SOURCE_IMAGE_EXTENSIONS.test(file.name || '');
+}
+
 function loadImage(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1219,8 +1232,8 @@ setupDropZone(
     elements.encodeDropZone,
     elements.encodeFileInput,
     async (file) => {
-        if (!file.type.match('image/png')) {
-            showToast('Only PNG files are supported');
+        if (!isSupportedSourceImage(file)) {
+            showToast('Please choose a PNG, JPG, or JPEG image');
             return;
         }
         try {
